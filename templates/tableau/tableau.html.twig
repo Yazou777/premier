@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+{% block title %}Hello TableauController!{% endblock %}
+ {% block body %}
+     <div class="container">
+         <div class="row mt-5">
+             <div class="col-sm-8 offset-sm-2">
+                 <h1>Votre tableau simple</h1>
+                 
+ <ul>
+    {% for info in informations %}
+        <li>{{ info }}</li>
+    {% endfor %}
+</ul>
+             </div>
+         </div>
+     </div>
+ {% endblock %}

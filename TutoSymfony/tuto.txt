@@ -4,7 +4,7 @@ symfony check:requirements
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 creation nouveau projet:
-symfony NomDuProjet --webapp
+symfony new NomDuProjet --webapp
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -22,7 +22,7 @@ ou directement:
 symfony console make:controller NomDuController
 
 exemple: 
-~/Bureau/vs_code/full_stack/Symfony/premier$ symfony console make:controller TestController
+~/Bureau/vs_code/full_stack/Symfony/premier$ symfony console make:controller test
 
          //////       (Cette commande vous permet de créer un contrôleur Test. En fait deux fichiers viennent d'être créés.) \\\\\\
 
@@ -38,4 +38,48 @@ cela creer:  created: src/Controller/TestController.php      //////    (La class
 
 
 
+//////////////////////////////////////////////////////////////////DOCTRINE\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
+Configuration
+
+Tous d'abord, il va falloir dire à Symfony (ou plutôt Doctrine) où se situe le moteur de base de donnée et comment s'y connecter. Cela se passe dans le fichier .env
+ON PEUT CREER .env.local est y mettre et modifier provenant de .env : DATABASE_URL="postgresql://app:!ChangeMe!@127.0.0.1:5432/app?serverVersion=14&charset=utf8"
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Création de la base
+
+Symfony nous permet de créer directement la base à partir de sa CLI avec la commande:               
+
+symfony console doctrine:database:create
+
+Création de la table
+
+symfony console make:entity
+
+
+Enfin la CLI nous indique qu'il reste à persister tout ça en base avec.
+
+symfony console make:migration
+
+symfony console doctrine:migrations:migrate
+
+
+
+Les Fixtures (alimentation bdd)              https://4wdev.tomoetek.fr/read/symf6-6    ///////////    https://ncode.amorce.org/ressources/Pool/CDA/WEB_Symfony_frc/fixture.html
+
+Symfony nous offre la possibilité de générer des données en base. L'extension n'est pas présente par défaut mais nous allons l'ajouter à nos dépendance de dev.
+
+composer require --dev orm-fixtures
+puis
+
+symfony console make:fixture  ou php bin/console make:fixture NomSouhaité
+
+On va ajouter une autre extension pour générer aléatoirement des données: FakerPhp
+
+composer require fakerphp/faker
+
+Pour utiliser cette fixture il suffit de lancer la commande suivante dans la console
+symfony console doctrine:fixtures:load ou php bin/console d:f:l
+
+Fixtures à partir de données existantes     https://ncode.amorce.org/ressources/Pool/CDA/WEB_Symfony_frc/fixture2.html
