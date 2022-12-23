@@ -1,0 +1,25 @@
+{{ form_start(form) }}
+    {# {{ form_widget(form) }} #}
+
+    <div class='row'>
+<div class='col-4'>
+    {{ form_row(form.title) }}
+</div>
+
+<div class='col-4'>
+    {{ form_row(form.picture) }}
+</div>
+
+<div class='col-4'>
+    {{ form_row(form.label) }}
+</div>
+
+<div class='mx-auto my-3'>
+    {{ form_row(form.artist) }}
+</div>
+</div>
+<div class='row'>
+    <button class="btn btn-primary btn-sm mx-auto">{{ button_label|default('Save') }}</button>
+
+{{ form_end(form) }}
+

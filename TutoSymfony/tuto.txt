@@ -83,3 +83,72 @@ Pour utiliser cette fixture il suffit de lancer la commande suivante dans la con
 symfony console doctrine:fixtures:load ou php bin/console d:f:l
 
 Fixtures à partir de données existantes     https://ncode.amorce.org/ressources/Pool/CDA/WEB_Symfony_frc/fixture2.html
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Creation formulaire (ca lie les pages et la base de donnée !)
+
+symfony console make:crud
+
+
+
+
+ exemple resultat:
+                        The class name of the entity to create CRUD (e.g. FiercePizza):
+ > Artist
+
+ Choose a name for your controller class (e.g. ArtistController) [ArtistController]:
+ > 
+
+ Do you want to generate tests for the controller?. [Experimental] (yes/no) [no]:
+ > 
+
+ created: src/Controller/ArtistController.php
+ created: src/Form/ArtistType.php
+ created: templates/artist/_delete_form.html.twig
+ created: templates/artist/_form.html.twig
+ created: templates/artist/edit.html.twig
+ created: templates/artist/index.html.twig
+ created: templates/artist/new.html.twig
+ created: templates/artist/show.html.twig
+
+
+
+si probleme de convertion en string ajouter la methode __ToString dans l'entité concerné exemple:  
+
+
+  public function __toString()
+    {
+        return $this->name;
+    }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Donner une apparence Bootstrap
+ajouter:
+
+# config/packages/twig.yaml
+twig:
+    form_themes: ['bootstrap_5_layout.html.twig']
+
+
+
+
+
+////////////////////////////////////////////////////liste des problemes rencontré et solution //////////////////////////////////////////////////////////////////
+///////////////////////PROBLEME////////////////                   ////////SOLUTION///////////
+
+Class don't exist                                       |          Clique droit sur la class ==> import class ==>  (selectionner)  Symfony\Component\Form\Extension\Core\Type\TextType;
+exemple pour TextType::class    :
+# Form/ArtistType.php
+  ->add('ProductName', TextType::class, [
+                 'label' => 'Nom du produit',
+                 'attr' => [
+                     'placeholder' => 'Produit',
+                 ],
+             ])
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------  
+
+Class "App\Form\Regex" not found                        |         Clique droit sur la class ==> import class ==>  (selectionner)  Symfony\Component\Validator\Constraints\Regex;

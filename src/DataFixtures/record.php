@@ -1,4 +1,6 @@
 <?php
+namespace App\DataFixtures;
+
 /**
  * Export to PHP Array plugin for PHPMyAdmin
  * @version 5.1.1deb5ubuntu1
@@ -22,7 +24,7 @@ $artist = array(
   array('artist_id' => '10','artist_name' => 'The Clash','artist_url' => NULL),
   array('artist_id' => '11','artist_name' => 'GrosSon','artist_url' => 'GrosSon.fr')
 );
-
+namespace App\DataFixtures;
 /* `record`.`disc` */
 $disc = array(
   array('disc_id' => '1','disc_title' => 'Fugazi','disc_year' => '1984','disc_picture' => 'Fugazi.jpeg','disc_label' => 'EMI','disc_genre' => 'Prog','disc_price' => '14.99','artist_id' => '7'),
