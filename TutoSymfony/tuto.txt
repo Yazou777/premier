@@ -5,6 +5,7 @@ symfony check:requirements
 
 creation nouveau projet:
 symfony new NomDuProjet --webapp
+(si c'est la 1ere fois demande mail et nom pour github)
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -61,7 +62,6 @@ symfony console make:entity
 Enfin la CLI nous indique qu'il reste à persister tout ça en base avec.
 
 symfony console make:migration
-
 symfony console doctrine:migrations:migrate
 
 
@@ -74,6 +74,11 @@ composer require --dev orm-fixtures
 puis
 
 symfony console make:fixture  ou php bin/console make:fixture NomSouhaité
+
+
+pour exécuter la fixture cad ecricre la requete sql et l'executer
+symfony console doctrine:fixtures:load
+
 
 On va ajouter une autre extension pour générer aléatoirement des données: FakerPhp
 
@@ -117,6 +122,7 @@ symfony console make:crud
 
 si probleme de convertion en string ajouter la methode __ToString dans l'entité concerné exemple:  
 
+ici dans Artist.php
 
   public function __toString()
     {
@@ -127,15 +133,43 @@ si probleme de convertion en string ajouter la methode __ToString dans l'entité
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Donner une apparence Bootstrap
-ajouter:
+ajouter dans :
 
 # config/packages/twig.yaml
 twig:
     form_themes: ['bootstrap_5_layout.html.twig']
 
 
+//////////////////////////////////////////////////////////L'authentification////////////////////////////////////////////////////////////////////////////////
 
+Installation du Bundle Security:
+composer require symfony/security-bundle
 
+puis
+symfony console make:user  
+(ca hash aussi le mot de passe)   
+
+Création de la table user
+
+Pour que l'authentification corresponde à nos besoins, il va nous falloir stocker les différents utilisateurs en base de données. On pourra stocker leurs informations (leur rôle notamment).
+
+Créez une table user contenant les informations suivantes :
+
+    un email (varchar 255, non null)
+    un mot de passe (varchar 255, non null)
+    un role (varchar 255, non null)
+
+pensez a :
+symfony console make:migration
+symfony console doctrine:migrations:migrate
+
+//////////////////////////////////////////////////////////////AUTHENTIFICATION/////////////////////////////////////////////////////////////////////
+
+symfony console make:auth
+
+////////////////////////////////////////////////////////////////////INSCRIPTION/////////////////////////////////////////////////////////////////////////
+
+symfony console make:registration-form
 
 ////////////////////////////////////////////////////liste des problemes rencontré et solution //////////////////////////////////////////////////////////////////
 ///////////////////////PROBLEME////////////////                   ////////SOLUTION///////////
