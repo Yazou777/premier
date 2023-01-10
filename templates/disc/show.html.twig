@@ -30,5 +30,7 @@
 
     <a href="{{ path('app_disc_edit', {'id': disc.id}) }}">edit</a>
 
+    <a href="{{ path('app_comments_new', {'id': disc.id}) }}">Commenter</a>
+
     {{ include('disc/_delete_form.html.twig') }}
 {% endblock %}

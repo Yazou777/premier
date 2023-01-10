@@ -65,6 +65,16 @@ symfony console make:migration
 symfony console doctrine:migrations:migrate
 
 
+//////////////////////////////////////////////////////////constraint/validator////////////////////////////////////////////////////////
+ Pour qu'on ne puisse pas mettre n'importe quoi dans la bdd on utilise des Assert.
+
+ajouter dans l'entity:
+use Symfony\Component\Validator\Constraints as Assert;
+
+exemple :         #[ORM\Column(length: 50)]
+                  #[Assert\Length(min: 2, max: 50)]
+                  private ?string $name = null;
+
 
 Les Fixtures (alimentation bdd)              https://4wdev.tomoetek.fr/read/symf6-6    ///////////    https://ncode.amorce.org/ressources/Pool/CDA/WEB_Symfony_frc/fixture.html
 
@@ -76,13 +86,50 @@ puis
 symfony console make:fixture  ou php bin/console make:fixture NomSouhaité
 
 
-pour exécuter la fixture cad ecricre la requete sql et l'executer
+pour exécuter la fixture cad ecrire la requete sql et l'executer
 symfony console doctrine:fixtures:load
 
 
 On va ajouter une autre extension pour générer aléatoirement des données: FakerPhp
 
-composer require fakerphp/faker
+composer require fakerphp/faker --dev
+
+Dans la fixture importez les class Generator et Factory telle que dans l'exemple :      
+
+<?php
+
+namespace App\DataFixtures;
+
+use Faker\Factory;
+use Faker\Generator;
+use App\Entity\Ingredient;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+
+class AppFixtures extends Fixture
+{
+
+    // Déclaration du générateur de faker
+    private Generator $faker;
+
+    public function __construct()
+    {
+        $this->faker = Factory::create('fr_FR');
+    }
+
+    public function load(ObjectManager $manager): void
+    {
+        for ($i = 0; $i < 50; $i++) {
+            $ingredient = new Ingredient();
+            $ingredient->setName($this->faker->word())
+                ->setPrice(mt_rand(0, 100));
+
+            $manager->persist($ingredient);
+        }
+            $manager->flush();
+    }
+}
+             
 
 Pour utiliser cette fixture il suffit de lancer la commande suivante dans la console
 symfony console doctrine:fixtures:load ou php bin/console d:f:l
@@ -186,3 +233,8 @@ exemple pour TextType::class    :
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------  
 
 Class "App\Form\Regex" not found                        |         Clique droit sur la class ==> import class ==>  (selectionner)  Symfony\Component\Validator\Constraints\Regex;
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+supprimer une table                                     |         supprimer entity et controller concerné
+                                                                  supprimer migrations dans le projet et dans la base de donnée
