@@ -258,6 +258,8 @@ ajouter templateaprés </table> exemple :
     {{ knp_pagination_render(ingredients) }}
 </div>
 
+ajouter visuelbootstrap a paginator modifier dans config/packages/knp_paginator.yaml
+pagination: '@KnpPaginator/Pagination/bootstrap_v5_pagination.html.twig'
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 afficher nombre ingredient dans template ajouter exemple :
