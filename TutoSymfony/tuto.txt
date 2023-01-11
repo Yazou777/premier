@@ -218,6 +218,69 @@ symfony console make:auth
 
 symfony console make:registration-form
 
+/////////////////////////////////////////////////////////////////////Bonus////////////////////////////////////////////////////////////////////////////////////
+
+Paginator : https://github.com/KnpLabs/KnpPaginatorBundle   
+
+installer : composer require knplabs/knp-paginator-bundle
+
+copier le YAML du github --> créer knp_paginator.yaml dans config/packages
+
+modifier controller exemple:                                                                                                                    
+
+
+
+#[Route('/ingredient')]
+class IngredientController extends AbstractController
+{
+    #[Route('/', name: 'app_ingredient_index', methods: ['GET'])]
+    public function index(IngredientRepository $ingredientRepository, PaginatorInterface $paginator, Request $request): Response
+    {
+
+    $ingredients = $paginator->paginate(
+        $ingredientRepository->findAll(), /* query NOT result */
+        $request->query->getInt('page', 1), /*page number*/
+        10 /*limit per page*/
+    );
+        return $this->render('ingredient/index.html.twig', [
+            'ingredients' => $ingredients,
+        ]);
+    }
+
+
+
+ajouter templateaprés </table> exemple : 
+
+
+      </tbody>
+    </table>
+<div class="navigation">
+    {{ knp_pagination_render(ingredients) }}
+</div>
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+afficher nombre ingredient dans template ajouter exemple :
+
+<div class="count mt-4">
+        Il y a {{ingredients.getTotalItemCount }} ingrédients 
+        </div>
+
+ pour eviter erreur en cas de tableau ici ingredient vide ajouter par exemple :
+
+{% block body %}
+    <h1>Ingredient index</h1>
+    {% if not ingredients.items is same as([]) %}
+    <div class="count mt-4">
+        Il y a {{ingredients.getTotalItemCount }} ingrédients 
+        </div> 
+
+en bas de page :
+
+  {% else %}
+    <h4> Il n'y a pas d'ingrédients </h4>
+    {% endif %}
+{% endblock %}
 ////////////////////////////////////////////////////liste des problemes rencontré et solution //////////////////////////////////////////////////////////////////
 ///////////////////////PROBLEME////////////////                   ////////SOLUTION///////////
 
@@ -238,3 +301,10 @@ Class "App\Form\Regex" not found                        |         Clique droit s
 
 supprimer une table                                     |         supprimer entity et controller concerné
                                                                   supprimer migrations dans le projet et dans la base de donnée
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+DateTimeImmutable ne se met pas a la date tout seul     |         ajoutez dans l'entity :   
+                                                                                            public function __construct()
+                                                                                                {
+                                                                                                    $this->createdAt = new DateTimeImmutable();
+                                                                                                }
+                                          
