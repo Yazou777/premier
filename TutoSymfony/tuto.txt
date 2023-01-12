@@ -249,7 +249,7 @@ class IngredientController extends AbstractController
 
 
 
-ajouter templateaprés </table> exemple : 
+ajouter dans le template aprés </table> exemple : 
 
 
       </tbody>
@@ -283,6 +283,65 @@ en bas de page :
     <h4> Il n'y a pas d'ingrédients </h4>
     {% endif %}
 {% endblock %}
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Unique entity https://symfony.com/doc/current/reference/constraints/UniqueEntity.html
+
+ajouter dans l'entity 
+#[UniqueEntity('nomcolonne')]
+
+ne pas oublier d'ajouter :
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
+
+je sais pas si obligatoire pour refresh utiliser php bin/console d:f:l
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+flash message https://symfony.com/doc/current/session.html#session-intro
+
+ajouter dans le controller telle que : 
+
+#[Route('/new', name: 'app_ingredient_new', methods: ['GET', 'POST'])]
+    public function new(Request $request, IngredientRepository $ingredientRepository): Response
+    {
+        $ingredient = new Ingredient();
+        $form = $this->createForm(IngredientType::class, $ingredient);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $ingredientRepository->save($ingredient, true);
+
+            $this->addFlash(
+                'success',
+                'Ingrédient ajouté !'
+            );
+
+            return $this->redirectToRoute('app_ingredient_index', [], Response::HTTP_SEE_OTHER);
+        }
+
+        return $this->renderForm('ingredient/new.html.twig', [
+            'ingredient' => $ingredient,
+            'form' => $form,
+        ]);
+    }
+
+ajouter dans le template telle que :
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Ingredient index{% endblock %}
+
+{% block body %}
+    <h1>Ingredient index</h1>
+
+         {# read and display just one flash message type #}
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+{% endfor %}
 ////////////////////////////////////////////////////liste des problemes rencontré et solution //////////////////////////////////////////////////////////////////
 ///////////////////////PROBLEME////////////////                   ////////SOLUTION///////////
 
