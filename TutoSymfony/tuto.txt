@@ -58,7 +58,10 @@ Création de la table
 
 symfony console make:entity
 
-
+Mettre les Constraint exemple : #[Assert\NotBlank()]
+                                #[Assert\Length(min: 2, max: 50)]
+                                #[Assert\Positive]
+                                #[Assert\LessThan(51)]
 Enfin la CLI nous indique qu'il reste à persister tout ça en base avec.
 
 symfony console make:migration
@@ -227,7 +230,7 @@ installer : composer require knplabs/knp-paginator-bundle
 copier le YAML du github --> créer knp_paginator.yaml dans config/packages
 
 modifier controller exemple:                                                                                                                    
-
+penser a import class paginator
 
 
 #[Route('/ingredient')]
@@ -342,6 +345,33 @@ ajouter dans le template telle que :
         {{ message }}
     </div>
 {% endfor %}
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Doctrine Lifecycle Callbacks  https://symfony.com/doc/current/doctrine/events.html#doctrine-lifecycle-callbacks
+pour donner une valeur a la colonne updateAt qui ne peut pas etre null.
+
+ajouter dans l'entity #[ORM\HasLifecycleCallbacks] sous les use
+
+creer une function :
+
+#[ORM\PrePersist]
+    public function setUpdateAtValue()
+    {
+        $this->updateAt = new \DateTimeImmutable();
+    }
+ajouter $this->updateAt = new \DateTimeImmutable(); dans le __construct()
+
+public function __construct()
+    {
+        $this->ingredients = new ArrayCollection();
+        $this->createdAt = new \DateTimeImmutable();
+        $this->updateAt = new \DateTimeImmutable();
+
+    }
+
+puis
+php bin/console d:f:l
 ////////////////////////////////////////////////////liste des problemes rencontré et solution //////////////////////////////////////////////////////////////////
 ///////////////////////PROBLEME////////////////                   ////////SOLUTION///////////
 
