@@ -1,6 +1,7 @@
 verifier que tout est ok pour le fonctionnement de Symphony:
 symfony check:requirements
-
+///////////////////////////////////////////////////////////afficher commande////////////////////////////////////////
+symfony console
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 creation nouveau projet:
@@ -212,7 +213,7 @@ Créez une table user contenant les informations suivantes :
 pensez a :
 symfony console make:migration
 symfony console doctrine:migrations:migrate
-
+php bin/console make:crud
 //////////////////////////////////////////////////////////////AUTHENTIFICATION/////////////////////////////////////////////////////////////////////
 
 symfony console make:auth
@@ -399,3 +400,22 @@ DateTimeImmutable ne se met pas a la date tout seul     |         ajoutez dans l
                                                                                                     $this->createdAt = new DateTimeImmutable();
                                                                                                 }
                                           
+
+  ->add('plainPassword', PasswordType::class, [
+                // instead of being set onto the object directly,
+                // this is read and encoded in the controller
+                
+                'mapped' => false,
+                'attr' => ['autocomplete' => 'new-password'],
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Please enter a password',
+                    ]),
+                    new Length([
+                        'min' => 6,
+                        'minMessage' => 'Your password should be at least {{ limit }} characters',
+                        // max length allowed by Symfony for security reasons
+                        'max' => 4096,
+                    ]),
+                ],
+            ])                           
